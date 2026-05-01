@@ -5,7 +5,7 @@
   <title>AIA</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0a0c12" />
+  <meta name="theme-color" content="#0b0b12" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="AIA" />
@@ -15,17 +15,17 @@
 
   <style>
     :root {
-      --bg: #06070b;
-      --bg-2: #0a0c12;
+      --bg: #0b0b12;
+      --bg-2: #10111a;
+      --panel: rgba(255, 255, 255, 0.06);
+      --panel-2: rgba(255, 255, 255, 0.08);
+      --line: rgba(255, 255, 255, 0.10);
       --text: #f5f7ff;
       --muted: #9aa3b2;
-      --line: rgba(255, 255, 255, 0.09);
-      --glass: rgba(255, 255, 255, 0.07);
-      --glass-strong: rgba(10, 12, 18, 0.58);
       --accent: #8b5cf6;
-      --accent-2: #4f46e5;
-      --danger: #ff6b81;
-      --shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+      --accent-2: #5b6cff;
+      --danger: #ff6a7a;
+      --shadow: 0 20px 40px rgba(0,0,0,.35);
     }
 
     * {
@@ -40,24 +40,16 @@
       background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
-      overflow: hidden;
     }
 
     body {
-      position: relative;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: -1;
+      min-height: 100dvh;
+      overflow: hidden;
       background:
-        radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.24), transparent 28%),
-        radial-gradient(circle at 85% 20%, rgba(79, 70, 229, 0.18), transparent 24%),
-        radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.14), transparent 30%),
-        linear-gradient(180deg, #0b0d14 0%, #06070b 100%);
-      background-attachment: fixed;
+        radial-gradient(circle at top left, rgba(91,108,255,.20), transparent 32%),
+        radial-gradient(circle at top right, rgba(139,92,246,.22), transparent 28%),
+        radial-gradient(circle at bottom center, rgba(60,72,120,.16), transparent 35%),
+        linear-gradient(180deg, #0a0b11 0%, #0d0f18 100%);
     }
 
     .app {
@@ -76,23 +68,23 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      background: var(--glass-strong);
+      background: rgba(12, 13, 22, .55);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
       border-bottom: 1px solid var(--line);
-      -webkit-backdrop-filter: blur(22px) saturate(180%);
-      backdrop-filter: blur(22px) saturate(180%);
     }
 
     .brand {
       min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 3px;
     }
 
     .title {
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 700;
-      letter-spacing: -0.2px;
+      letter-spacing: .2px;
     }
 
     .status {
@@ -104,15 +96,14 @@
     }
 
     .ghost-btn {
+      appearance: none;
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255,255,255,.04);
       color: var(--text);
-      border-radius: 14px;
       padding: 10px 12px;
+      border-radius: 14px;
       font-size: 13px;
       font-weight: 600;
-      -webkit-backdrop-filter: blur(12px);
-      backdrop-filter: blur(12px);
     }
 
     .chat {
@@ -120,27 +111,26 @@
       padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       scroll-behavior: smooth;
-      overscroll-behavior: contain;
     }
 
     .msg {
       max-width: 84%;
       padding: 12px 14px;
-      border-radius: 20px;
+      border-radius: 18px;
+      line-height: 1.42;
+      font-size: 16px;
       white-space: pre-wrap;
       word-break: break-word;
-      font-size: 16px;
-      line-height: 1.45;
       box-shadow: var(--shadow);
-      animation: fadeIn .18s ease-out;
+      animation: fadeIn .16s ease-out;
     }
 
     @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translateY(6px);
       }
       to {
         opacity: 1;
@@ -150,28 +140,27 @@
 
     .msg.user {
       align-self: flex-end;
+      color: white;
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #fff;
       border-bottom-right-radius: 8px;
     }
 
     .msg.assistant {
       align-self: flex-start;
-      background: var(--glass);
-      border: 1px solid var(--line);
-      color: var(--text);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(14px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
       border-bottom-left-radius: 8px;
-      -webkit-backdrop-filter: blur(18px) saturate(160%);
-      backdrop-filter: blur(18px) saturate(160%);
     }
 
     .msg.temp {
-      opacity: 0.82;
+      opacity: .82;
     }
 
     .msg.error {
-      border-color: rgba(255, 107, 129, 0.45);
-      color: #ffd8df;
+      border-color: rgba(255,106,122,.35);
+      color: #ffd8de;
     }
 
     .composer-wrap {
@@ -180,16 +169,16 @@
         12px
         calc(10px + env(safe-area-inset-bottom))
         12px;
-      background: var(--glass-strong);
+      background: rgba(12, 13, 22, .55);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
       border-top: 1px solid var(--line);
-      -webkit-backdrop-filter: blur(22px) saturate(180%);
-      backdrop-filter: blur(22px) saturate(180%);
     }
 
     .composer {
       display: flex;
-      align-items: flex-end;
       gap: 10px;
+      align-items: flex-end;
     }
 
     .input {
@@ -198,26 +187,24 @@
       max-height: 140px;
       resize: none;
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255,255,255,.06);
       color: var(--text);
-      border-radius: 18px;
+      border-radius: 16px;
       padding: 12px 14px;
       font-size: 16px;
-      line-height: 1.4;
+      line-height: 1.35;
       outline: none;
-      box-shadow: var(--shadow);
-      -webkit-appearance: none;
-      appearance: none;
-      -webkit-backdrop-filter: blur(14px);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
     .input::placeholder {
-      color: #7f8796;
+      color: #7f8798;
     }
 
     .input:focus {
-      border-color: rgba(139, 92, 246, 0.45);
+      border-color: rgba(139, 92, 246, .55);
+      box-shadow: 0 0 0 3px rgba(139,92,246,.10);
     }
 
     .send-btn {
@@ -226,15 +213,15 @@
       flex: 0 0 48px;
       border: none;
       border-radius: 16px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #fff;
+      color: white;
       font-size: 18px;
       font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
       box-shadow: var(--shadow);
     }
 
     .send-btn:disabled {
-      opacity: 0.6;
+      opacity: .55;
     }
 
     .hint {
@@ -250,9 +237,9 @@
     <header class="topbar">
       <div class="brand">
         <div class="title">Айя</div>
-        <div class="status" id="status">На связи</div>
+        <div class="status" id="status">на связи</div>
       </div>
-      <button class="ghost-btn" id="clearBtn">Очистить</button>
+      <button class="ghost-btn" id="clearBtn" type="button">Очистить</button>
     </header>
 
     <main class="chat" id="chat"></main>
@@ -266,97 +253,150 @@
           placeholder="Напиши Айе..."
           enterkeyhint="send"
         ></textarea>
-        <button id="sendBtn" class="send-btn">↑</button>
+        <button id="sendBtn" class="send-btn" type="button">↑</button>
       </div>
       <div class="hint">Enter — отправить, Shift+Enter — новая строка</div>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = "aia_chat_v4";
+    (() => {
+      const STORAGE_KEY = "aia_history_v3";
 
-    const chatEl = document.getElementById("chat");
-    const inputEl = document.getElementById("input");
-    const sendBtn = document.getElementById("sendBtn");
-    const clearBtn = document.getElementById("clearBtn");
-    const statusEl = document.getElementById("status");
+      const chat = document.getElementById("chat");
+      const input = document.getElementById("input");
+      const sendBtn = document.getElementById("sendBtn");
+      const clearBtn = document.getElementById("clearBtn");
+      const statusEl = document.getElementById("status");
 
-    let chatHistory = [];
-
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      chatHistory = saved ? JSON.parse(saved) : [];
-      if (!Array.isArray(chatHistory)) chatHistory = [];
-    } catch {
-      chatHistory = [];
-    }
-
-    function saveHistory() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(chatHistory));
-    }
-
-    function setStatus(text) {
-      statusEl.textContent = text;
-    }
-
-    function scrollToBottom() {
-      requestAnimationFrame(() => {
-        chatEl.scrollTop = chatEl.scrollHeight;
-      });
-    }
-
-    function autoResize() {
-      inputEl.style.height = "48px";
-      inputEl.style.height = Math.min(inputEl.scrollHeight, 140) + "px";
-    }
-
-    function addMessage(role, text, options = {}) {
-      const div = document.createElement("div");
-      div.className = [
-        "msg",
-        role,
-        options.temp ? "temp" : "",
-        options.error ? "error" : ""
-      ].join(" ").trim();
-
-      div.textContent = text;
-      chatEl.appendChild(div);
-      scrollToBottom();
-      return div;
-    }
-
-    function renderHistory() {
-      chatEl.innerHTML = "";
-
-      if (!chatHistory.length) {
-        addMessage(
-          "assistant",
-          "Я здесь. Пиши нормально — и я отвечу нормально.",
-          { temp: true }
-        );
-        return;
-      }
-
-      for (const item of chatHistory) {
-        if (!item || !item.role || !item.content) continue;
-        addMessage(item.role, item.content);
-      }
-    }
-
-    async function sendMessage() {
-      const text = inputEl.value.trim();
-      if (!text || sendBtn.disabled) return;
-
-      addMessage("user", text);
-      chatHistory.push({ role: "user", content: text });
-      saveHistory();
-
-      inputEl.value = "";
-      autoResize();
-      sendBtn.disabled = true;
-      setStatus("Думаю...");
-
-      const tempMsg = addMessage("assistant", "Айя думает...", { temp: true });
+      let history = [];
 
       try {
-        const 
+        const saved = localStorage.getItem(STORAGE_KEY);
+        history = saved ? JSON.parse(saved) : [];
+        if (!Array.isArray(history)) history = [];
+      } catch (e) {
+        history = [];
+      }
+
+      function saveHistory() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+      }
+
+      function setStatus(text) {
+        statusEl.textContent = text;
+      }
+
+      function scrollToBottom() {
+        requestAnimationFrame(() => {
+          chat.scrollTop = chat.scrollHeight;
+        });
+      }
+
+      function autoResize() {
+        input.style.height = "48px";
+        input.style.height = Math.min(input.scrollHeight, 140) + "px";
+      }
+
+      function addMessage(role, text, options = {}) {
+        const el = document.createElement("div");
+        el.className = `msg ${role}${options.temp ? " temp" : ""}${options.error ? " error" : ""}`;
+        el.textContent = text;
+        chat.appendChild(el);
+        scrollToBottom();
+        return el;
+      }
+
+      function renderHistory() {
+        chat.innerHTML = "";
+        if (!history.length) {
+          addMessage("assistant", "Привет. Я Айя.\nТеперь давай без цирка и поломок — просто поговорим.", { temp: true });
+          return;
+        }
+
+        for (const item of history) {
+          if (!item || !item.role || !item.content) continue;
+          addMessage(item.role, item.content);
+        }
+      }
+
+      async function sendMessage() {
+        const text = input.value.trim();
+        if (!text || sendBtn.disabled) return;
+
+        const userMessage = { role: "user", content: text };
+        history.push(userMessage);
+        saveHistory();
+        addMessage("user", text);
+
+        input.value = "";
+        autoResize();
+        sendBtn.disabled = true;
+        setStatus("думаю...");
+
+        const temp = addMessage("assistant", "…", { temp: true });
+
+        try {
+          const context = history.slice(-16);
+
+          const res = await fetch("/api/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ messages: context })
+          });
+
+          const data = await res.json().catch(() => ({}));
+
+          if (!res.ok) {
+            throw new Error(
+              data?.error?.message ||
+              data?.error ||
+              `HTTP ${res.status}`
+            );
+          }
+
+          const reply = String(data?.reply || "Пустой ответ от модели.").trim();
+
+          temp.remove();
+          history.push({ role: "assistant", content: reply });
+          saveHistory();
+          addMessage("assistant", reply);
+          setStatus("на связи");
+        } catch (err) {
+          temp.textContent = "Ошибка связи: " + (err.message || "неизвестно");
+          temp.classList.add("error");
+          temp.classList.remove("temp");
+          setStatus("сбой связи");
+          console.error(err);
+        } finally {
+          sendBtn.disabled = false;
+          input.focus();
+        }
+      }
+
+      clearBtn.addEventListener("click", () => {
+        history = [];
+        saveHistory();
+        renderHistory();
+        setStatus("память очищена");
+      });
+
+      sendBtn.addEventListener("click", sendMessage);
+
+      input.addEventListener("input", autoResize);
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+
+      renderHistory();
+      autoResize();
+    })();
+  </script>
+</body>
+</html>
