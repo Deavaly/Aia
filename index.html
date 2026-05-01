@@ -30,7 +30,7 @@
       overflow: hidden;
     }
 
-    /* ═══ Яркие цветные пятна ═══ */
+    /* Цветные пятна */
     .bg {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       z-index: 0;
@@ -42,8 +42,8 @@
       width: 420px; height: 420px;
       top: -100px; left: -80px;
       border-radius: 50%;
-      background: rgba(139, 92, 246, 0.5);
-      filter: blur(100px);
+      background: rgba(139, 92, 246, 0.55);
+      filter: blur(110px);
     }
     .bg::after {
       content: '';
@@ -51,8 +51,8 @@
       width: 380px; height: 380px;
       bottom: -80px; right: -80px;
       border-radius: 50%;
-      background: rgba(59, 130, 246, 0.4);
-      filter: blur(100px);
+      background: rgba(59, 130, 246, 0.45);
+      filter: blur(110px);
     }
     .bg-extra1 {
       position: fixed;
@@ -60,8 +60,8 @@
       top: 45%; left: 50%;
       transform: translate(-50%, -50%);
       border-radius: 50%;
-      background: rgba(168, 85, 247, 0.25);
-      filter: blur(100px);
+      background: rgba(168, 85, 247, 0.28);
+      filter: blur(110px);
       z-index: 0;
     }
     .bg-extra2 {
@@ -69,8 +69,8 @@
       width: 250px; height: 250px;
       top: 20%; right: -40px;
       border-radius: 50%;
-      background: rgba(236, 72, 153, 0.2);
-      filter: blur(90px);
+      background: rgba(236, 72, 153, 0.22);
+      filter: blur(100px);
       z-index: 0;
     }
     .bg-extra3 {
@@ -78,12 +78,12 @@
       width: 280px; height: 280px;
       bottom: 15%; left: -40px;
       border-radius: 50%;
-      background: rgba(99, 102, 241, 0.25);
-      filter: blur(90px);
+      background: rgba(99, 102, 241, 0.28);
+      filter: blur(100px);
       z-index: 0;
     }
 
-    /* ═══ Header — стекло поверх чата ═══ */
+    /* Header — сильное стекло */
     .header {
       position: absolute;
       top: 0; left: 0; right: 0;
@@ -91,17 +91,17 @@
       padding: env(safe-area-inset-top) 20px 15px;
       height: var(--header-h);
       display: flex; justify-content: space-between; align-items: center;
-      background: rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(60px) saturate(180%);
-      -webkit-backdrop-filter: blur(60px) saturate(180%);
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+      background: rgba(255, 255, 255, 0.025);
+      backdrop-filter: blur(85px) saturate(220%) brightness(1.08);
+      -webkit-backdrop-filter: blur(85px) saturate(220%) brightness(1.08);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.45);
     }
     .status-group { display: flex; flex-direction: column; }
     .name { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
     .status { font-size: 11px; color: #a78bfa; text-transform: uppercase; letter-spacing: 1px; }
 
-    /* ═══ Chat — скроллится ПОД header и input ═══ */
+    /* Chat */
     .chat {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -113,7 +113,7 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* ═══ Messages ═══ */
+    /* Messages */
     .msg {
       max-width: 82%; padding: 15px 19px; border-radius: 20px;
       font-size: 17px; line-height: 1.45; position: relative;
@@ -133,9 +133,7 @@
       border: 1px solid rgba(168, 85, 247, 0.3);
       border-bottom-right-radius: 6px;
       color: white;
-      box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 
     .aia {
@@ -145,23 +143,21 @@
       -webkit-backdrop-filter: blur(40px) saturate(150%);
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-bottom-left-radius: 6px;
-      box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 
-    /* ═══ Input Area — стекло поверх чата ═══ */
+    /* Input Area — сильное стекло */
     .input-area {
       position: absolute;
       bottom: 0; left: 0; right: 0;
       z-index: 10;
       padding: 15px 15px calc(15px + env(safe-area-inset-bottom));
       height: var(--input-h);
-      background: rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(60px) saturate(180%);
-      -webkit-backdrop-filter: blur(60px) saturate(180%);
-      border-top: 1px solid rgba(255,255,255,0.12);
-      box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.4);
+      background: rgba(255, 255, 255, 0.025);
+      backdrop-filter: blur(85px) saturate(220%) brightness(1.08);
+      -webkit-backdrop-filter: blur(85px) saturate(220%) brightness(1.08);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.45);
     }
     .input-row {
       display: flex; gap: 10px;
