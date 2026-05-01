@@ -1,202 +1,185 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aia</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aia — Glass Chat</title>
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(145deg, #0f0c1f 0%, #1a1733 100%);
-      color: #e0dfff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
+  body {
+    font-family: "Inter", "Segoe UI", sans-serif;
+    height: 100vh;
+    background: #1a1a2e; /* чуть светлее, тёмно-синий — не бело, не чёрно */
+    color: #e6e6ff;
+    overflow: hidden;
+  }
 
-    /* ====================== HEADER ====================== */
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      padding: 16px 30px;
-      background: rgba(20, 20, 45, 0.55);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+  /* ===== КОНТЕЙНЕР ===== */
+  .app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
 
-    header h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      background: linear-gradient(90deg, #a5b4ff, #c8b4ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+  /* ===== СТЕКЛЯННЫЙ СВЕРХУ СЛОЙ (header) ===== */
+  .header {
+    background: rgba(255, 255, 255, 0.08); /* очень прозрачный */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-    /* ====================== ЧАТ ====================== */
-    .chat-container {
-      flex: 1;
-      margin-top: 75px;
-      margin-bottom: 85px;
-      padding: 20px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(120, 110, 200, 0.3) transparent;
-    }
+  .header h1 {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
 
-    .message {
-      max-width: 75%;
-      padding: 15px 20px;
-      border-radius: 18px;
-      line-height: 1.5;
-      font-size: 1.02rem;
-      background: rgba(30, 30, 55, 0.65);
-      backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    }
+  /* ===== СТЕКЛЯННАЯ ОБЛАСТЬ ЧАТА ===== */
+  .chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
 
-    .message.user {
-      align-self: flex-end;
-      background: rgba(70, 60, 230, 0.75);
-      border: 1px solid rgba(130, 120, 255, 0.3);
-      border-bottom-right-radius: 5px;
-    }
+  /* ===== СТЕКЛЯННЫЕ БОКСЫ ДИАЛОГА ===== */
+  .message {
+    max-width: 70%;
+    padding: 14px 18px;
+    border-radius: 16px;
+    line-height: 1.5;
+    font-size: 15px;
 
-    .message.ai {
-      align-self: flex-start;
-      border-bottom-left-radius: 5px;
-    }
+    /* Стекло: полупрозрачный + размытие + тонкая граница */
+    background: rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  }
 
-    /* ====================== INPUT AREA ====================== */
-    .input-area {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      padding: 18px 25px;
-      background: rgba(18, 18, 42, 0.75);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-      border-top: 1px solid rgba(255, 255, 255, 0.09);
-      z-index: 1000;
-    }
+  .message.user {
+    align-self: flex-end;
+    background: rgba(100, 110, 255, 0.18);
+    border: 1px solid rgba(150, 160, 255, 0.25);
+    border-radius: 16px 16px 4px 16px;
+  }
 
-    .input-wrapper {
-      display: flex;
-      gap: 12px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
+  .message.ai {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px 16px 16px 4px;
+  }
 
-    #user-input {
-      flex: 1;
-      padding: 16px 20px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(30, 30, 60, 0.6);
-      color: #e0dfff;
-      font-size: 1.05rem;
-      outline: none;
-    }
+  /* ===== СТЕКЛЯННЫЙ СНИЗУ СЛОЙ (ввод) ===== */
+  .footer {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-    #user-input:focus {
-      border-color: rgba(140, 130, 255, 0.5);
-      background: rgba(35, 35, 70, 0.8);
-    }
+  .footer input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f0f0ff;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-size: 15px;
+  }
 
-    #send-btn {
-      padding: 0 28px;
-      background: linear-gradient(135deg, #4f46e5, #7c6eff);
-      color: white;
-      border: none;
-      border-radius: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+  .footer input:focus {
+    outline: none;
+    border-color: rgba(150, 160, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(100, 110, 255, 0.15);
+  }
 
-    #send-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(80, 70, 255, 0.3);
-    }
+  .footer button {
+    background: rgba(100, 110, 255, 0.25);
+    color: #f0f0ff;
+    border: none;
+    border-radius: 12px;
+    padding: 0 22px;
+    font-weight: 600;
+    cursor: pointer;
+  }
 
-    .chat-container::-webkit-scrollbar {
-      width: 8px;
-    }
-    .chat-container::-webkit-scrollbar-thumb {
-      background: rgba(130, 120, 200, 0.35);
-      border-radius: 20px;
-    }
-  </style>
+  .footer button:hover {
+    background: rgba(120, 130, 255, 0.35);
+  }
+
+  /* скроллбар */
+  .chat::-webkit-scrollbar {
+    width: 6px;
+  }
+  .chat::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+  }
+</style>
 </head>
 <body>
+  <div class="app">
+    <!-- СТЕКЛЯННЫЙ СВЕРХУ СЛОЙ -->
+    <header class="header">
+      <h1>Aia</h1>
+    </header>
 
-  <header>
-    <h1>Aia</h1>
-  </header>
-
-  <div class="chat-container" id="chat-container">
-    <!-- Сообщения будут добавляться сюда через JS -->
-    <div class="message ai">
-      Привет. Я Aia. Чем могу помочь сегодня?
+    <!-- СТЕКЛЯННАЯ ОБЛАСТЬ ЧАТА -->
+    <div class="chat" id="chat">
+      <div class="message ai">Привет! Я Aia — чем могу помочь сегодня?</div>
+      <div class="message user">Покажи, как работает стекло 😄</div>
     </div>
-  </div>
 
-  <div class="input-area">
-    <div class="input-wrapper">
-      <input type="text" id="user-input" placeholder="Напишите сообщение..." autocomplete="off">
-      <button id="send-btn">Отправить</button>
+    <!-- СТЕКЛЯННЫЙ СНИЗУ СЛОЙ -->
+    <div class="footer">
+      <input id="userText" placeholder="Напиши сообщение..." onkeypress="if(event.key==='Enter') send()">
+      <button onclick="send()">Отправить</button>
     </div>
   </div>
 
   <script>
-    const chatContainer = document.getElementById('chat-container');
-    const userInput = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('userText');
 
-    function addMessage(text, type) {
-      const msg = document.createElement('div');
-      msg.className = `message ${type}`;
-      msg.textContent = text;
-      chatContainer.appendChild(msg);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-
-    function sendMessage() {
-      const text = userInput.value.trim();
+    function send() {
+      const text = input.value.trim();
       if (!text) return;
 
-      addMessage(text, 'user');
-      userInput.value = '';
+      // сообщение пользователя
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.textContent = text;
+      chat.appendChild(userMsg);
 
-      // Имитация ответа
-      setTimeout(() => {
-        addMessage("Я получила твоё сообщение. Это демо-версия.", 'ai');
-      }, 800);
+      // ответ AI (заглушка)
+      const aiMsg = document.createElement('div');
+      aiMsg.className = 'message ai';
+      aiMsg.textContent = "Понял! Стекло работает идеально ✨";
+      chat.appendChild(aiMsg);
+
+      input.value = '';
+      chat.scrollTop = chat.scrollHeight;
     }
-
-    sendBtn.addEventListener('click', sendMessage);
-    userInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sendMessage();
-    });
   </script>
-
 </body>
 </html>
