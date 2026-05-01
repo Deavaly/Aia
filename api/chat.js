@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.1-8b-instruct', // Или поменяй на 'google/gemini-2.0-flash-exp:free' для лучшего понимания мира
+        model: 'google/gemini-2.0-flash-exp:free',
         messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
         temperature: 0.6
       })
