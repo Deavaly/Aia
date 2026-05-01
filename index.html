@@ -104,7 +104,7 @@
     </div>
   </div>
 
-  <script>
+    <script>
     const box = document.getElementById('box');
     const ui = document.getElementById('ui');
     const st = document.getElementById('st');
@@ -116,36 +116,42 @@
       div.textContent = txt;
       box.appendChild(div);
       box.scrollTop = box.scrollHeight;
+      return div;
     }
 
     h.forEach(m => add(m.role, m.content));
-    if(!h.length) add('aia', 'Я здесь. Спрашивай о чем угодно, я не кусаюсь... почти.');
 
     async function send() {
       const v = ui.value.trim(); if(!v) return;
-      ui.value = ''; add('user', v);
+      ui.value = ''; 
+      add('user', v);
       h.push({role:'user', content:v});
-      st.textContent = 'Айя думает...';
+      
+      st.textContent = 'Айя пишет...';
+      const aiaDiv = add('aia', '...'); 
       
       try {
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({messages: h.slice(-10)})
+          body: JSON.stringify({messages: h.slice(-12)})
         });
         const d = await res.json();
+        
         if(d.reply) {
-          add('aia', d.reply);
+          aiaDiv.textContent = d.reply; // Пока без потока, но быстро
           h.push({role:'assistant', content:d.reply});
           localStorage.setItem('aia_v2', JSON.stringify(h));
         }
-      } catch(e) { add('aia', 'Связь прервалась...'); }
+      } catch(e) { aiaDiv.textContent = 'Связь прервалась...'; }
       st.textContent = 'В сети';
     }
 
     function clearChat() {
-      localStorage.removeItem('aia_v2');
-      location.reload();
+      if(confirm('Начать с чистого листа?')) {
+        localStorage.removeItem('aia_v2');
+        location.reload();
+      }
     }
   </script>
 </body>
