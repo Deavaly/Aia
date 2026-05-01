@@ -83,7 +83,7 @@
       z-index: 0;
     }
 
-    /* ═══ Header — стекло "Лупа" ═══ */
+    /* ═══ Header — максимальная прозрачность ═══ */
     .header {
       position: absolute;
       top: 0; left: 0; right: 0;
@@ -91,17 +91,16 @@
       padding: env(safe-area-inset-top) 20px 15px;
       height: var(--header-h);
       display: flex; justify-content: space-between; align-items: center;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(50px) saturate(200%) brightness(1.2);
-      -webkit-backdrop-filter: blur(50px) saturate(200%) brightness(1.2);
-      border-bottom: 1px solid rgba(255,255,255,0.15);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      background: rgba(10, 10, 18, 0.3);
+      backdrop-filter: blur(20px) saturate(180%) brightness(1.15);
+      -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.15);
+      border-bottom: 0.5px solid rgba(255,255,255,0.08);
     }
     .status-group { display: flex; flex-direction: column; }
     .name { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
     .status { font-size: 11px; color: #a78bfa; text-transform: uppercase; letter-spacing: 1px; }
 
-    /* ═══ Chat — скроллится ПОД header и input ═══ */
+    /* ═══ Chat ═══ */
     .chat {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -150,18 +149,17 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 
-    /* ═══ Input Area — стекло "Лупа" ═══ */
+    /* ═══ Input Area — максимальная прозрачность ═══ */
     .input-area {
       position: absolute;
       bottom: 0; left: 0; right: 0;
       z-index: 10;
       padding: 15px 15px calc(15px + env(safe-area-inset-bottom));
       height: var(--input-h);
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(50px) saturate(200%) brightness(1.2);
-      -webkit-backdrop-filter: blur(50px) saturate(200%) brightness(1.2);
-      border-top: 1px solid rgba(255,255,255,0.15);
-      box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.4), inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+      background: rgba(10, 10, 18, 0.3);
+      backdrop-filter: blur(20px) saturate(180%) brightness(1.15);
+      -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.15);
+      border-top: 0.5px solid rgba(255,255,255,0.08);
     }
     .input-row {
       display: flex; gap: 10px;
