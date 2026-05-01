@@ -14,10 +14,10 @@ module.exports = async (req, res) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        // Смена модели на ту, которая РЕАЛЬНО видит сеть
-        model: 'google/gemini-pro-1.5', 
+    
+        model: 'meta-llama/llama-3.1-8b-instruct:free', 
         messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
-        temperature: 0.7
+        temperature: 0.5
       })
     });
 
