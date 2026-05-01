@@ -1,103 +1,386 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>AIA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0b0f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="AIA" />
+
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/icon-512.png" />
+
   <style>
-    :root { --accent: #8b5cf6; }
-    
-    /* ФОН ВКЛЕЕН НАМЕРТВО, ПРОЗРАЧНОСТЬ БУДЕТ РАБОТАТЬ */
-    body, html { 
-      margin: 0; padding: 0; height: 100dvh; color: #fff; 
-      font-family: -apple-system, system-ui, sans-serif; 
+    :root {
+      --bg: #0b0b0f;
+      --panel: rgba(18, 21, 33, 0.88);
+      --panel-2: #161924;
+      --line: rgba(255, 255, 255, 0.08);
+      --text: #f5f7fb;
+      --muted: #9ba3b5;
+      --accent: #8b5cf6;
+      --accent-2: #4f46e5;
+      --danger: #ff5d73;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    }
+
+    body {
+      height: 100dvh;
       overflow: hidden;
-      background-color: #050508;
-      background-image: 
-        radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.4), transparent 50%),
-        radial-gradient(circle at 85% 30%, rgba(124, 58, 237, 0.4), transparent 50%);
-      background-attachment: fixed;
+      background:
+        radial-gradient(circle at top, rgba(99,102,241,.16), transparent 35%),
+        radial-gradient(circle at 80% 20%, rgba(139,92,246,.12), transparent 25%),
+        var(--bg);
     }
 
-    .app { display: flex; flex-direction: column; height: 100dvh; }
-
-    /* ЭФФЕКТ СТЕКЛА */
-    .header {
-      padding: env(safe-area-inset-top) 20px 15px;
-      display: flex; justify-content: space-between; align-items: center;
-      background: rgba(10, 10, 15, 0.3);
-      backdrop-filter: blur(25px) saturate(180%);
-      -webkit-backdrop-filter: blur(25px) saturate(180%);
-      border-bottom: 0.5px solid rgba(255,255,255,0.1);
-      z-index: 10;
-    }
-    
-    .chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-    
-    .msg { max-width: 80%; padding: 12px 16px; border-radius: 20px; font-size: 16px; line-height: 1.4; }
-    .user { align-self: flex-end; background: var(--accent); }
-    .aia { 
-      align-self: flex-start; 
-      background: rgba(255, 255, 255, 0.05); 
-      border: 0.5px solid rgba(255,255,255,0.1);
-      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+    .app {
+      height: 100dvh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
     }
 
-    .input-area {
-      padding: 15px 15px calc(30px + env(safe-area-inset-bottom));
-      background: rgba(10, 10, 15, 0.3);
-      backdrop-filter: blur(25px) saturate(180%);
-      -webkit-backdrop-filter: blur(25px) saturate(180%);
-      border-top: 0.5px solid rgba(255,255,255,0.1);
+    .topbar {
+      padding:
+        calc(12px + env(safe-area-inset-top))
+        14px
+        12px
+        14px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(11,11,15,.7);
+      backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
     }
-    
-    .input-row { display: flex; gap: 10px; background: rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 25px; }
-    input { flex: 1; background: none; border: none; color: #fff; font-size: 16px; outline: none; }
-    .btn { width: 36px; height: 36px; border-radius: 50%; background: #fff; border: none; color: #000; font-size: 18px; font-weight: bold; }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .status {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ghost-btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .chat {
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scroll-behavior: smooth;
+    }
+
+    .msg {
+      max-width: 84%;
+      padding: 12px 14px;
+      border-radius: 18px;
+      line-height: 1.42;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: var(--shadow);
+      font-size: 16px;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      border-bottom-right-radius: 8px;
+    }
+
+    .msg.assistant {
+      align-self: flex-start;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-bottom-left-radius: 8px;
+    }
+
+    .msg.temp {
+      opacity: .75;
+    }
+
+    .msg.error {
+      border-color: rgba(255, 93, 115, .45);
+      color: #ffd7dd;
+    }
+
+    .composer-wrap {
+      border-top: 1px solid var(--line);
+      background: rgba(11,11,15,.74);
+      backdrop-filter: blur(14px);
+      padding:
+        10px
+        12px
+        calc(10px + env(safe-area-inset-bottom))
+        12px;
+    }
+
+    .composer {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .input {
+      flex: 1;
+      min-height: 48px;
+      max-height: 140px;
+      resize: none;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 12px 14px;
+      font-size: 16px;
+      line-height: 1.35;
+      outline: none;
+      box-shadow: var(--shadow);
+    }
+
+    .input::placeholder {
+      color: #7f8799;
+    }
+
+    .input:focus {
+      border-color: rgba(139, 92, 246, .55);
+    }
+
+    .send-btn {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      box-shadow: var(--shadow);
+    }
+
+    .send-btn:disabled {
+      opacity: .55;
+    }
+
+    .hint {
+      margin-top: 8px;
+      padding: 0 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
   <div class="app">
-    <div class="header">
-      <div style="font-weight:700; font-size:20px; letter-spacing:-0.5px;">Айя</div>
-      <button onclick="localStorage.clear(); location.reload();" style="background:none; border:none; color:rgba(255,255,255,0.4);">Очистить</button>
-    </div>
-    <div class="chat" id="box"></div>
-    <div class="input-area">
-      <div class="input-row">
-        <input type="text" id="ui" placeholder="Напиши Айе..." onkeypress="if(event.key==='Enter')send()">
-        <button id="btn" class="btn" onclick="send()">↑</button>
+    <header class="topbar">
+      <div class="brand">
+        <div class="title">AIA</div>
+        <div class="status" id="status">Айя на связи</div>
       </div>
+      <button class="ghost-btn" id="clearBtn">Очистить</button>
+    </header>
+
+    <main class="chat" id="chat"></main>
+
+    <div class="composer-wrap">
+      <div class="composer">
+        <textarea
+          id="input"
+          class="input"
+          rows="1"
+          placeholder="Напиши Айе..."
+          enterkeyhint="send"
+        ></textarea>
+        <button id="sendBtn" class="send-btn">↑</button>
+      </div>
+      <div class="hint">Enter — отправить</div>
     </div>
   </div>
+
   <script>
-    const box = document.getElementById('box');
-    const ui = document.getElementById('ui');
-    let h = JSON.parse(localStorage.getItem('aia_v6') || '[]');
-    
-    function add(r, t) {
-      const d = document.createElement('div'); d.className = `msg ${r==='user'?'user':'aia'}`;
-      d.textContent = t; box.appendChild(d); box.scrollTop = box.scrollHeight;
+    const STORAGE_KEY = "aia_history_v1";
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("input");
+    const sendBtn = document.getElementById("sendBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const statusEl = document.getElementById("status");
+
+    let history = [];
+
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      history = saved ? JSON.parse(saved) : [];
+      if (!Array.isArray(history)) history = [];
+    } catch {
+      history = [];
     }
-    
-    if(h.length === 0) add('aia', 'Я снова здесь. И теперь я никуда не пропаду.');
-    h.forEach(m => add(m.role, m.content));
-    
-    async function send() {
-      const v = ui.value.trim(); if(!v) return;
-      ui.value = ''; add('user', v); h.push({role:'user', content:v});
+
+    function saveHistory() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    }
+
+    function setStatus(text) {
+      statusEl.textContent = text;
+    }
+
+    function scrollToBottom() {
+      requestAnimationFrame(() => {
+        chat.scrollTop = chat.scrollHeight;
+      });
+    }
+
+    function autoResize() {
+      input.style.height = "48px";
+      input.style.height = Math.min(input.scrollHeight, 140) + "px";
+    }
+
+    function addMessage(role, text, options = {}) {
+      const el = document.createElement("div");
+      el.className = `msg ${role} ${options.temp ? "temp" : ""} ${options.error ? "error" : ""}`.trim();
+      el.textContent = text;
+      chat.appendChild(el);
+      scrollToBottom();
+      return el;
+    }
+
+    function renderHistory() {
+      chat.innerHTML = "";
+      if (!history.length) {
+        addMessage(
+          "assistant",
+          "Я Айя. Живая, умная и на твоей стороне.\nПиши.",
+          { temp: true }
+        );
+        return;
+      }
+
+      for (const item of history) {
+        if (!item || !item.role || !item.content) continue;
+        addMessage(item.role, item.content);
+      }
+    }
+
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text || sendBtn.disabled) return;
+
+      const userMessage = { role: "user", content: text };
+      history.push(userMessage);
+      saveHistory();
+      addMessage("user", text);
+
+      input.value = "";
+      autoResize();
+      sendBtn.disabled = true;
+      setStatus("Думаю...");
+
+      const temp = addMessage("assistant", "Айя думает...", { temp: true });
+
       try {
-        const res = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({messages:h.slice(-10)}) });
-        const d = await res.json();
-        if(d.reply) { 
-          add('aia', d.reply); 
-          h.push({role:'assistant', content:d.reply}); 
-          localStorage.setItem('aia_v6', JSON.stringify(h)); 
+        const context = history.slice(-20);
+
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ messages: context })
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          throw new Error(
+            data?.error?.message ||
+            data?.error ||
+            `HTTP ${res.status}`
+          );
         }
-      } catch(e) { add('aia', 'Сбой сети...'); }
+
+        temp.remove();
+
+        const reply = (data?.reply || "Пустой ответ от модели.").trim();
+        history.push({ role: "assistant", content: reply });
+        saveHistory();
+        addMessage("assistant", reply);
+
+        setStatus("Айя на связи");
+      } catch (err) {
+        temp.remove();
+        addMessage("assistant", "Ошибка связи: " + (err.message || "неизвестно"), {
+          temp: true,
+          error: true
+        });
+        setStatus("Сбой связи");
+        console.error(err);
+      } finally {
+        sendBtn.disabled = false;
+        input.focus();
+      }
     }
+
+    clearBtn.addEventListener("click", () => {
+      history = [];
+      saveHistory();
+      renderHistory();
+      setStatus("Память очищена");
+    });
+
+    sendBtn.addEventListener("click", sendMessage);
+
+    input.addEventListener("input", autoResize);
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    renderHistory();
+    autoResize();
   </script>
 </body>
 </html>
