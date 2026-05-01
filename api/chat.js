@@ -21,10 +21,10 @@ module.exports = async (req, res) => {
       body: JSON.stringify({
         model: 'meta-llama/llama-3.1-8b-instruct',
         messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
-        temperature: 0.7, // Снижаем температуру, чтобы было меньше бреда
+        temperature: 0.55, // Снижаем температуру, чтобы было меньше бреда
         top_p: 0.9,
         max_tokens: 600,
-        presence_penalty: 0.6, // Чтобы она меньше повторялась
+        presence_penalty: 0.7, // Чтобы она меньше повторялась
         frequency_penalty: 0.5
       })
     });
