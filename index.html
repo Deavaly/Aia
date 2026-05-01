@@ -1,184 +1,151 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aia — Glass Chat</title>
+  <meta charset="UTF-8">
+  <title>AIA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/IMG_3917.jpeg">
 
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    font-family: "Inter", "Segoe UI", sans-serif;
-    height: 100vh;
-    background: #1a1a2e; /* чуть светлее, тёмно-синий — не бело, не чёрно */
-    color: #e6e6ff;
-    overflow: hidden;
-  }
-
-  /* ===== КОНТЕЙНЕР ===== */
-  .app {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
-
-  /* ===== СТЕКЛЯННЫЙ СВЕРХУ СЛОЙ (header) ===== */
-  .header {
-    background: rgba(255, 255, 255, 0.08); /* очень прозрачный */
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    padding: 16px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .header h1 {
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-
-  /* ===== СТЕКЛЯННАЯ ОБЛАСТЬ ЧАТА ===== */
-  .chat {
-    flex: 1;
-    overflow-y: auto;
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  /* ===== СТЕКЛЯННЫЕ БОКСЫ ДИАЛОГА ===== */
-  .message {
-    max-width: 70%;
-    padding: 14px 18px;
-    border-radius: 16px;
-    line-height: 1.5;
-    font-size: 15px;
-
-    /* Стекло: полупрозрачный + размытие + тонкая граница */
-    background: rgba(255, 255, 255, 0.10);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  }
-
-  .message.user {
-    align-self: flex-end;
-    background: rgba(100, 110, 255, 0.18);
-    border: 1px solid rgba(150, 160, 255, 0.25);
-    border-radius: 16px 16px 4px 16px;
-  }
-
-  .message.ai {
-    align-self: flex-start;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 16px 16px 16px 4px;
-  }
-
-  /* ===== СТЕКЛЯННЫЙ СНИЗУ СЛОЙ (ввод) ===== */
-  .footer {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    padding: 16px 28px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .footer input {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.10);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #f0f0ff;
-    border-radius: 12px;
-    padding: 12px 18px;
-    font-size: 15px;
-  }
-
-  .footer input:focus {
-    outline: none;
-    border-color: rgba(150, 160, 255, 0.5);
-    box-shadow: 0 0 0 3px rgba(100, 110, 255, 0.15);
-  }
-
-  .footer button {
-    background: rgba(100, 110, 255, 0.25);
-    color: #f0f0ff;
-    border: none;
-    border-radius: 12px;
-    padding: 0 22px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .footer button:hover {
-    background: rgba(120, 130, 255, 0.35);
-  }
-
-  /* скроллбар */
-  .chat::-webkit-scrollbar {
-    width: 6px;
-  }
-  .chat::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 10px;
-  }
-</style>
+  <style>
+    :root {
+      --bg: #08080c;
+      --accent: #a855f7;
+      --text: #ffffff;
+      --glass: rgba(255, 255, 255, 0.05);
+    }
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    body, html { 
+      margin: 0; padding: 0; height: 100%; 
+      background: var(--bg); color: var(--text);
+      font-family: -apple-system, system-ui, sans-serif;
+      overflow: hidden;
+    }
+    .app {
+      display: flex; flex-direction: column; height: 100dvh;
+      background: radial-gradient(circle at 50% -20%, #2e1065, transparent);
+    }
+    .header {
+      padding: env(safe-area-inset-top) 20px 15px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(8, 8, 12, 0.5); backdrop-filter: blur(20px);
+      border-bottom: 0.5px solid rgba(255,255,255,0.1);
+      z-index: 10;
+    }
+    .status-group { display: flex; flex-direction: column; }
+    .name { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+    .status { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+    
+    .chat {
+      flex: 1; overflow-y: auto; padding: 20px;
+      display: flex; flex-direction: column; gap: 16px;
+      scroll-behavior: smooth;
+    }
+    .msg {
+      max-width: 85%; padding: 14px 18px; border-radius: 22px;
+      font-size: 17px; line-height: 1.4; position: relative;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .user {
+      align-self: flex-end; background: var(--accent);
+      color: white; border-bottom-right-radius: 4px;
+      box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    }
+    .aia {
+      align-self: flex-start; background: var(--glass);
+      border: 0.5px solid rgba(255,255,255,0.1);
+      border-bottom-left-radius: 4px;
+    }
+    
+    .input-area {
+      padding: 15px 15px calc(15px + env(safe-area-inset-bottom));
+      background: rgba(8, 8, 12, 0.8); backdrop-filter: blur(20px);
+      border-top: 0.5px solid rgba(255,255,255,0.1);
+    }
+    .input-row {
+      display: flex; gap: 10px; background: var(--glass);
+      padding: 8px 8px 8px 16px; border-radius: 25px;
+      border: 0.5px solid rgba(255,255,255,0.1);
+    }
+    input {
+      flex: 1; background: none; border: none; color: white;
+      font-size: 17px; outline: none;
+    }
+    .send-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: white; border: none; color: black;
+      font-size: 20px; font-weight: bold;
+    }
+    .send-btn:disabled { opacity: 0.3; }
+  </style>
 </head>
 <body>
   <div class="app">
-    <!-- СТЕКЛЯННЫЙ СВЕРХУ СЛОЙ -->
-    <header class="header">
-      <h1>Aia</h1>
-    </header>
-
-    <!-- СТЕКЛЯННАЯ ОБЛАСТЬ ЧАТА -->
-    <div class="chat" id="chat">
-      <div class="message ai">Привет! Я Aia — чем могу помочь сегодня?</div>
-      <div class="message user">Покажи, как работает стекло 😄</div>
+    <div class="header">
+      <div class="status-group">
+        <span class="name">Айя</span>
+        <span id="st" class="status">В сети</span>
+      </div>
+      <button onclick="clearChat()" style="background:none; border:none; color:rgba(255,255,255,0.4); font-size:13px;">Очистить</button>
     </div>
+    
+    <div class="chat" id="box"></div>
 
-    <!-- СТЕКЛЯННЫЙ СНИЗУ СЛОЙ -->
-    <div class="footer">
-      <input id="userText" placeholder="Напиши сообщение..." onkeypress="if(event.key==='Enter') send()">
-      <button onclick="send()">Отправить</button>
+    <div class="input-area">
+      <div class="input-row">
+        <input type="text" id="ui" placeholder="Начни историю..." onkeypress="if(event.key==='Enter')send()">
+        <button id="btn" class="send-btn" onclick="send()">↑</button>
+      </div>
     </div>
   </div>
 
   <script>
-    const chat = document.getElementById('chat');
-    const input = document.getElementById('userText');
+    const box = document.getElementById('box');
+    const ui = document.getElementById('ui');
+    const st = document.getElementById('st');
+    let h = JSON.parse(localStorage.getItem('aia_v2') || '[]');
 
-    function send() {
-      const text = input.value.trim();
-      if (!text) return;
+    function add(role, txt) {
+      const div = document.createElement('div');
+      div.className = `msg ${role==='user'?'user':'aia'}`;
+      div.textContent = txt;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
 
-      // сообщение пользователя
-      const userMsg = document.createElement('div');
-      userMsg.className = 'message user';
-      userMsg.textContent = text;
-      chat.appendChild(userMsg);
+    h.forEach(m => add(m.role, m.content));
+    if(!h.length) add('aia', 'Я здесь. Спрашивай о чем угодно, я не кусаюсь... почти.');
 
-      // ответ AI (заглушка)
-      const aiMsg = document.createElement('div');
-      aiMsg.className = 'message ai';
-      aiMsg.textContent = "Понял! Стекло работает идеально ✨";
-      chat.appendChild(aiMsg);
+    async function send() {
+      const v = ui.value.trim(); if(!v) return;
+      ui.value = ''; add('user', v);
+      h.push({role:'user', content:v});
+      st.textContent = 'Айя думает...';
+      
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({messages: h.slice(-10)})
+        });
+        const d = await res.json();
+        if(d.reply) {
+          add('aia', d.reply);
+          h.push({role:'assistant', content:d.reply});
+          localStorage.setItem('aia_v2', JSON.stringify(h));
+        }
+      } catch(e) { add('aia', 'Связь прервалась...'); }
+      st.textContent = 'В сети';
+    }
 
-      input.value = '';
-      chat.scrollTop = chat.scrollHeight;
+    function clearChat() {
+      localStorage.removeItem('aia_v2');
+      location.reload();
     }
   </script>
 </body>
