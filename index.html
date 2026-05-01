@@ -11,138 +11,106 @@
   <link rel="apple-touch-icon" href="/IMG_3917.jpeg">
 
 <style>
-  * {
-    box-sizing: border-box;
-  }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-  body {
-    margin: 0;
-    font-family: 'Inter', system-ui, sans-serif;
-    background: linear-gradient(145deg, #0d0b1f 0%, #1a162e 100%); /* чуть светлее, чем обычно */
-    color: #e0e0ff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-  /* ====================== HEADER (стекло) ====================== */
-  header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    padding: 16px 28px;
-    background: rgba(15, 15, 35, 0.45);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-  }
+    body {
+        font-family: 'Inter', sans-serif;
+        height: 100vh;
+        background: linear-gradient(145deg, #0f0f1e 0%, #16162a 100%);
+        overflow: hidden;
+        color: #e0e0ff;
+    }
 
-  header h1 {
-    margin: 0;
-    font-size: 1.55rem;
-    font-weight: 700;
-    background: linear-gradient(90deg, #a0b0ff, #c0b0ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+    .container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
 
-  /* ====================== ЧАТ ====================== */
-  main {
-    flex: 1;
-    max-width: 920px;
-    margin: 85px auto 120px;
-    padding: 20px;
-  }
+    /* === Верхняя панель (Glass) === */
+    header {
+        background: rgba(20, 22, 45, 0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 1rem 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
 
-  #chat-container {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 10px;
-    overflow-y: auto;
-    height: 100%;
-  }
+    /* === Область чата === */
+    .chat-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
 
-  /* ====================== СООБЩЕНИЯ (стекло) ====================== */
-  .message {
-    padding: 14px 18px;
-    border-radius: 16px;
-    line-height: 1.55;
-    font-size: 0.97rem;
-    max-width: 78%;
+    /* === Сообщения (Glass) === */
+    .message {
+        max-width: 75%;
+        padding: 14px 18px;
+        border-radius: 18px;
+        line-height: 1.5;
+        font-size: 15px;
+        background: rgba(25, 28, 55, 0.65);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
 
-    /* Тёмное стекло */
-    background: rgba(25, 28, 55, 0.52);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-  }
+    .message.user {
+        align-self: flex-end;
+        background: rgba(45, 50, 95, 0.7);
+        border: 1px solid rgba(120, 130, 255, 0.2);
+        border-radius: 18px 18px 4px 18px;
+    }
 
-  .message.user {
-    align-self: flex-end;
-    border-bottom-right-radius: 4px;
-    background: rgba(80, 65, 255, 0.65);
-    border: 1px solid rgba(140, 130, 255, 0.25);
-  }
+    .message.assistant {
+        align-self: flex-start;
+        border-radius: 18px 18px 18px 4px;
+    }
 
-  .message.ai {
-    align-self: flex-start;
-    border-bottom-left-radius: 4px;
-  }
+    /* === Нижняя панель ввода (Glass) === */
+    .input-area {
+        background: rgba(20, 22, 45, 0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 1.2rem 2rem;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+    }
 
-  /* ====================== НИЖНЯЯ ПАНЕЛЬ (стекло) ====================== */
-  #input-area {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 16px 24px;
-    background: rgba(15, 15, 35, 0.55);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.35);
-    z-index: 1000;
-  }
+    .input-area input {
+        background: rgba(30, 32, 60, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #e0e0ff;
+        border-radius: 12px;
+        padding: 12px 18px;
+    }
 
-  #user-input {
-    flex: 1;
-    background: rgba(30, 30, 60, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #e0e0ff;
-    padding: 14px 18px;
-    border-radius: 14px;
-    font-size: 1rem;
-    outline: none;
-  }
+    .input-area input:focus {
+        outline: none;
+        border-color: rgba(100, 110, 255, 0.5);
+        box-shadow: 0 0 0 3px rgba(70, 80, 200, 0.15);
+    }
 
-  #user-input:focus {
-    border-color: rgba(140, 130, 255, 0.4);
-    background: rgba(35, 35, 70, 0.7);
-  }
-
-  #send-btn {
-    padding: 0 24px;
-    background: linear-gradient(135deg, #5041ff, #6e5fff);
-    color: white;
-    border: none;
-    border-radius: 14px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  /* Скроллбар */
-  #chat-container::-webkit-scrollbar {
-    width: 6px;
-  }
-  #chat-container::-webkit-scrollbar-thumb {
-    background: rgba(120, 110, 200, 0.3);
-    border-radius: 20px;
-  }
+    /* Скроллбар */
+    .chat-container::-webkit-scrollbar {
+        width: 6px;
+    }
+    .chat-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+    }
 </style>
 </head>
 <body>
