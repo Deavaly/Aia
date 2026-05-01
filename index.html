@@ -1,386 +1,213 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>AIA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0b0f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0b0b0f" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="AIA" />
-
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="apple-touch-icon" href="/icons/icon-512.png" />
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="https://picsum.photos/id/1015/512/512">
 
   <style>
     :root {
       --bg: #0b0b0f;
-      --panel: rgba(18, 21, 33, 0.88);
-      --panel-2: #161924;
-      --line: rgba(255, 255, 255, 0.08);
-      --text: #f5f7fb;
-      --muted: #9ba3b5;
+      --panel: #161924;
       --accent: #8b5cf6;
-      --accent-2: #4f46e5;
-      --danger: #ff5d73;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --text: #f0f0f5;
+      --muted: #9ba3b5;
     }
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
-    }
-
-    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       height: 100dvh;
       overflow: hidden;
-      background:
-        radial-gradient(circle at top, rgba(99,102,241,.16), transparent 35%),
-        radial-gradient(circle at 80% 20%, rgba(139,92,246,.12), transparent 25%),
-        var(--bg);
+      background: radial-gradient(circle at top, rgba(139,92,246,0.15), transparent 50%), var(--bg);
     }
-
-    .app {
-      height: 100dvh;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-    }
-
+    .app { height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; }
     .topbar {
-      padding:
-        calc(12px + env(safe-area-inset-top))
-        14px
-        12px
-        14px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(11,11,15,.7);
-      backdrop-filter: blur(14px);
+      padding: 50px 16px 12px;
+      background: rgba(11,11,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      align-items: center;
     }
-
-    .brand {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-
-    .title {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: .2px;
-    }
-
-    .status {
-      font-size: 12px;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .ghost-btn {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
+    .title { font-size: 22px; font-weight: 700; }
+    .status { font-size: 13px; color: var(--muted); }
     .chat {
+      padding: 16px;
       overflow-y: auto;
-      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      scroll-behavior: smooth;
+      gap: 12px;
     }
-
     .msg {
-      max-width: 84%;
-      padding: 12px 14px;
+      max-width: 82%;
+      padding: 13px 16px;
       border-radius: 18px;
-      line-height: 1.42;
-      white-space: pre-wrap;
-      word-break: break-word;
-      box-shadow: var(--shadow);
-      font-size: 16px;
+      font-size: 16.2px;
+      line-height: 1.45;
     }
-
     .msg.user {
       align-self: flex-end;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      background: linear-gradient(135deg, #8b5cf6, #4f46e5);
       color: white;
-      border-bottom-right-radius: 8px;
+      border-bottom-right-radius: 6px;
     }
-
     .msg.assistant {
       align-self: flex-start;
-      background: var(--panel-2);
-      border: 1px solid var(--line);
-      color: var(--text);
-      border-bottom-left-radius: 8px;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-bottom-left-radius: 6px;
     }
-
-    .msg.temp {
-      opacity: .75;
-    }
-
-    .msg.error {
-      border-color: rgba(255, 93, 115, .45);
-      color: #ffd7dd;
-    }
-
-    .composer-wrap {
-      border-top: 1px solid var(--line);
-      background: rgba(11,11,15,.74);
-      backdrop-filter: blur(14px);
-      padding:
-        10px
-        12px
-        calc(10px + env(safe-area-inset-bottom))
-        12px;
-    }
-
     .composer {
-      display: flex;
-      gap: 10px;
-      align-items: flex-end;
+      padding: 12px 12px 30px;
+      background: rgba(11,11,15,0.9);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255,255,255,0.08);
     }
-
+    .input-area {
+      display: flex;
+      gap: 8px;
+    }
     .input {
       flex: 1;
-      min-height: 48px;
-      max-height: 140px;
-      resize: none;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      color: var(--text);
+      background: #1f2333;
+      border: 1px solid #333;
       border-radius: 16px;
-      padding: 12px 14px;
-      font-size: 16px;
-      line-height: 1.35;
-      outline: none;
-      box-shadow: var(--shadow);
-    }
-
-    .input::placeholder {
-      color: #7f8799;
-    }
-
-    .input:focus {
-      border-color: rgba(139, 92, 246, .55);
-    }
-
-    .send-btn {
-      width: 48px;
-      height: 48px;
-      flex: 0 0 48px;
-      border: none;
-      border-radius: 16px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      padding: 14px 16px;
       color: white;
-      font-size: 18px;
-      font-weight: 700;
-      box-shadow: var(--shadow);
+      font-size: 16px;
+      min-height: 50px;
+      max-height: 160px;
+      resize: none;
     }
-
-    .send-btn:disabled {
-      opacity: .55;
-    }
-
-    .hint {
-      margin-top: 8px;
-      padding: 0 4px;
-      font-size: 12px;
-      color: var(--muted);
+    .send {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #8b5cf6, #4f46e5);
+      border: none;
+      color: white;
+      font-size: 22px;
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <header class="topbar">
-      <div class="brand">
-        <div class="title">AIA</div>
-        <div class="status" id="status">Айя на связи</div>
+    <div class="topbar">
+      <div>
+        <div class="title">Айя</div>
+        <div class="status" id="status">на связи</div>
       </div>
-      <button class="ghost-btn" id="clearBtn">Очистить</button>
-    </header>
+      <button id="clearBtn" style="padding:8px 14px; background:#222; color:#ddd; border:none; border-radius:10px;">Очистить</button>
+    </div>
 
-    <main class="chat" id="chat"></main>
+    <div class="chat" id="chat"></div>
 
-    <div class="composer-wrap">
-      <div class="composer">
-        <textarea
-          id="input"
-          class="input"
-          rows="1"
-          placeholder="Напиши Айе..."
-          enterkeyhint="send"
-        ></textarea>
-        <button id="sendBtn" class="send-btn">↑</button>
+    <div class="composer">
+      <div class="input-area">
+        <textarea id="input" class="input" placeholder="Напиши Айе..."></textarea>
+        <button id="sendBtn" class="send">↑</button>
       </div>
-      <div class="hint">Enter — отправить</div>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = "aia_history_v1";
-    const chat = document.getElementById("chat");
-    const input = document.getElementById("input");
-    const sendBtn = document.getElementById("sendBtn");
-    const clearBtn = document.getElementById("clearBtn");
-    const statusEl = document.getElementById("status");
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const status = document.getElementById('status');
 
-    let history = [];
+    let history = JSON.parse(localStorage.getItem('aia_history') || '[]');
 
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      history = saved ? JSON.parse(saved) : [];
-      if (!Array.isArray(history)) history = [];
-    } catch {
-      history = [];
-    }
-
-    function saveHistory() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-    }
-
-    function setStatus(text) {
-      statusEl.textContent = text;
-    }
-
-    function scrollToBottom() {
-      requestAnimationFrame(() => {
-        chat.scrollTop = chat.scrollHeight;
-      });
-    }
-
-    function autoResize() {
-      input.style.height = "48px";
-      input.style.height = Math.min(input.scrollHeight, 140) + "px";
-    }
-
-    function addMessage(role, text, options = {}) {
-      const el = document.createElement("div");
-      el.className = `msg ${role} ${options.temp ? "temp" : ""} ${options.error ? "error" : ""}`.trim();
-      el.textContent = text;
-      chat.appendChild(el);
-      scrollToBottom();
-      return el;
+    function addMessage(role, content, isError = false) {
+      const div = document.createElement('div');
+      div.className = `msg ${role}`;
+      if (isError) div.style.border = '1px solid #ff5d73';
+      div.textContent = content;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
     }
 
     function renderHistory() {
-      chat.innerHTML = "";
-      if (!history.length) {
-        addMessage(
-          "assistant",
-          "Я Айя. Живая, умная и на твоей стороне.\nПиши.",
-          { temp: true }
-        );
-        return;
-      }
-
-      for (const item of history) {
-        if (!item || !item.role || !item.content) continue;
-        addMessage(item.role, item.content);
+      chat.innerHTML = '';
+      if (history.length === 0) {
+        addMessage('assistant', 'Привет. Я Айя.\nГовори со мной как с живой.', true);
+      } else {
+        history.forEach(msg => addMessage(msg.role, msg.content));
       }
     }
 
-    async function sendMessage() {
+    async function send() {
       const text = input.value.trim();
-      if (!text || sendBtn.disabled) return;
+      if (!text) return;
 
-      const userMessage = { role: "user", content: text };
-      history.push(userMessage);
-      saveHistory();
-      addMessage("user", text);
+      addMessage('user', text);
+      history.push({role: 'user', content: text});
+      localStorage.setItem('aia_history', JSON.stringify(history));
 
-      input.value = "";
-      autoResize();
+      input.value = '';
       sendBtn.disabled = true;
-      setStatus("Думаю...");
+      status.textContent = 'думает...';
 
-      const temp = addMessage("assistant", "Айя думает...", { temp: true });
+      const tempMsg = document.createElement('div');
+      tempMsg.className = 'msg assistant';
+      tempMsg.textContent = 'Айя думает...';
+      chat.appendChild(tempMsg);
+      chat.scrollTop = chat.scrollHeight;
 
       try {
-        const context = history.slice(-20);
-
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ messages: context })
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ messages: history.slice(-16) })
         });
 
-        const data = await res.json().catch(() => ({}));
+        const data = await res.json();
 
-        if (!res.ok) {
-          throw new Error(
-            data?.error?.message ||
-            data?.error ||
-            `HTTP ${res.status}`
-          );
-        }
+        tempMsg.remove();
 
-        temp.remove();
+        if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
 
-        const reply = (data?.reply || "Пустой ответ от модели.").trim();
-        history.push({ role: "assistant", content: reply });
-        saveHistory();
-        addMessage("assistant", reply);
-
-        setStatus("Айя на связи");
-      } catch (err) {
-        temp.remove();
-        addMessage("assistant", "Ошибка связи: " + (err.message || "неизвестно"), {
-          temp: true,
-          error: true
-        });
-        setStatus("Сбой связи");
-        console.error(err);
+        const reply = data.reply || 'Не смогла ответить...';
+        addMessage('assistant', reply);
+        history.push({role: 'assistant', content: reply});
+        localStorage.setItem('aia_history', JSON.stringify(history));
+        status.textContent = 'на связи';
+      } catch (e) {
+        tempMsg.remove();
+        addMessage('assistant', 'Ошибка связи: ' + e.message, true);
+        status.textContent = 'ошибка';
       } finally {
         sendBtn.disabled = false;
-        input.focus();
       }
     }
 
-    clearBtn.addEventListener("click", () => {
-      history = [];
-      saveHistory();
-      renderHistory();
-      setStatus("Память очищена");
+    sendBtn.addEventListener('click', send);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        send();
+      }
     });
 
-    sendBtn.addEventListener("click", sendMessage);
-
-    input.addEventListener("input", autoResize);
-
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Очистить всю переписку?')) {
+        history = [];
+        localStorage.removeItem('aia_history');
+        renderHistory();
       }
     });
 
     renderHistory();
-    autoResize();
   </script>
 </body>
 </html>
