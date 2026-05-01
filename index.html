@@ -13,6 +13,8 @@
   <style>
     :root {
       --text: #ffffff;
+      --header-h: 70px;
+      --input-h: 80px;
     }
     * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
     body, html { 
@@ -24,8 +26,7 @@
     }
 
     .app {
-      display: flex; flex-direction: column; height: 100dvh;
-      position: relative;
+      position: relative; height: 100dvh;
       overflow: hidden;
     }
 
@@ -82,10 +83,13 @@
       z-index: 0;
     }
 
-    /* ═══ Header — настоящее стекло ═══ */
+    /* ═══ Header — стекло поверх чата ═══ */
     .header {
-      position: relative; z-index: 3;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
       padding: env(safe-area-inset-top) 20px 15px;
+      height: var(--header-h);
       display: flex; justify-content: space-between; align-items: center;
       background: rgba(255, 255, 255, 0.04);
       backdrop-filter: blur(60px) saturate(180%);
@@ -97,14 +101,16 @@
     .name { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
     .status { font-size: 11px; color: #a78bfa; text-transform: uppercase; letter-spacing: 1px; }
 
-    /* ═══ Chat ═══ */
+    /* ═══ Chat — скроллится ПОД header и input ═══ */
     .chat {
-      position: relative; z-index: 1;
-      flex: 1; overflow-y: auto; padding: 20px;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 1;
+      overflow-y: auto;
+      padding: calc(var(--header-h) + 15px) 20px calc(var(--input-h) + 15px) 20px;
       display: flex; flex-direction: column; gap: 18px;
       scroll-behavior: smooth;
-      mask-image: linear-gradient(to bottom, transparent 0px, black 40px, black calc(100% - 40px), transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0px, black 40px, black calc(100% - 40px), transparent 100%);
+      -webkit-overflow-scrolling: touch;
     }
 
     /* ═══ Messages ═══ */
@@ -112,13 +118,13 @@
       max-width: 82%; padding: 15px 19px; border-radius: 20px;
       font-size: 17px; line-height: 1.45; position: relative;
       animation: fadeIn 0.3s ease;
+      flex-shrink: 0;
     }
     @keyframes fadeIn { 
       from { opacity: 0; transform: translateY(12px); } 
       to { opacity: 1; transform: translateY(0); } 
     }
 
-    /* Пользователь */
     .user {
       align-self: flex-end;
       background: rgba(139, 92, 246, 0.2);
@@ -132,7 +138,6 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 
-    /* Айя */
     .aia {
       align-self: flex-start;
       background: rgba(255, 255, 255, 0.08);
@@ -145,10 +150,13 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 
-    /* ═══ Input Area — настоящее стекло ═══ */
+    /* ═══ Input Area — стекло поверх чата ═══ */
     .input-area {
-      position: relative; z-index: 3;
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 10;
       padding: 15px 15px calc(15px + env(safe-area-inset-bottom));
+      height: var(--input-h);
       background: rgba(255, 255, 255, 0.04);
       backdrop-filter: blur(60px) saturate(180%);
       -webkit-backdrop-filter: blur(60px) saturate(180%);
@@ -182,7 +190,6 @@
 </head>
 <body>
 
-  <!-- Цветные пятна для стекла -->
   <div class="bg"></div>
   <div class="bg-extra1"></div>
   <div class="bg-extra2"></div>
