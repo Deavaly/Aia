@@ -3,140 +3,85 @@
 <head>
   <meta charset="UTF-8">
   <title>AIA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <style>
-    :root {
-      --bg: #050508;
-      --accent: #8b5cf6;
-      --glass: rgba(255, 255, 255, 0.05);
-    }
-    body, html { 
-      margin: 0; padding: 0; height: 100dvh; 
-      background: var(--bg); color: white;
-      font-family: -apple-system, system-ui, sans-serif;
-      overflow: hidden;
-    }
-    .app {
-      display: flex; flex-direction: column; height: 100dvh;
-      background: radial-gradient(circle at 50% -20%, #2e1065, transparent), var(--bg);
-    }
+    :root { --accent: #8b5cf6; }
+    body, html { margin: 0; padding: 0; height: 100%; background: #000; color: #fff; font-family: -apple-system, system-ui, sans-serif; overflow: hidden; }
+    
+    /* Живой фон для прозрачности */
+    .bg-blobs { position: fixed; width: 100%; height: 100%; z-index: -1; overflow: hidden; background: #050508; }
+    .blob { position: absolute; width: 300px; height: 300px; background: var(--accent); filter: blur(100px); opacity: 0.15; border-radius: 50%; animation: move 20s infinite alternate; }
+    @keyframes move { from { transform: translate(-10%, -10%); } to { transform: translate(100%, 50%); } }
+
+    .app { display: flex; flex-direction: column; height: 100dvh; }
+    
     .header {
       padding: env(safe-area-inset-top) 20px 15px;
       display: flex; justify-content: space-between; align-items: center;
-      background: rgba(0,0,0,0.4); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      background: rgba(10, 10, 15, 0.4); 
+      backdrop-filter: blur(30px) saturate(150%); -webkit-backdrop-filter: blur(30px) saturate(150%);
       border-bottom: 0.5px solid rgba(255,255,255,0.1);
-      z-index: 10;
     }
-    .chat {
-      flex: 1; overflow-y: auto; padding: 20px;
-      display: flex; flex-direction: column; gap: 14px;
-      scroll-behavior: smooth;
-    }
-    .msg {
-      max-width: 82%; padding: 12px 16px; border-radius: 20px; font-size: 16px; line-height: 1.45;
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    .user { align-self: flex-end; background: var(--accent); border-bottom-right-radius: 4px; }
-    .aia { align-self: flex-start; background: var(--glass); border: 0.5px solid rgba(255,255,255,0.1); border-bottom-left-radius: 4px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); }
+
+    .chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
     
+    .msg { max-width: 80%; padding: 12px 16px; border-radius: 20px; font-size: 16px; line-height: 1.4; }
+    .user { align-self: flex-end; background: var(--accent); border-bottom-right-radius: 4px; }
+    
+    .aia { 
+      align-self: flex-start; 
+      background: rgba(255, 255, 255, 0.07); 
+      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      border: 0.5px solid rgba(255,255,255,0.1); 
+      border-bottom-left-radius: 4px; 
+    }
+
     .input-area {
-      padding: 12px 15px calc(25px + env(safe-area-inset-bottom));
-      background: rgba(0,0,0,0.5); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      padding: 15px 15px calc(30px + env(safe-area-inset-bottom));
+      background: rgba(10, 10, 15, 0.4);
+      backdrop-filter: blur(30px) saturate(150%); -webkit-backdrop-filter: blur(30px) saturate(150%);
       border-top: 0.5px solid rgba(255,255,255,0.1);
     }
-    .input-row {
-      display: flex; gap: 10px; background: rgba(255,255,255,0.06);
-      padding: 8px 8px 8px 16px; border-radius: 24px; border: 0.5px solid rgba(255,255,255,0.1);
-    }
-    input { flex: 1; background: none; border: none; color: white; font-size: 16px; outline: none; }
-    .send-btn { width: 38px; height: 38px; border-radius: 50%; background: white; border: none; color: black; font-size: 20px; font-weight: bold; cursor: pointer; }
-    .send-btn:disabled { opacity: 0.3; }
+
+    .input-row { display: flex; gap: 10px; background: rgba(255,255,255,0.08); padding: 8px 8px 8px 16px; border-radius: 25px; }
+    input { flex: 1; background: none; border: none; color: #fff; font-size: 16px; outline: none; }
+    .btn { width: 38px; height: 38px; border-radius: 50%; background: #fff; border: none; color: #000; font-size: 20px; font-weight: bold; }
   </style>
 </head>
 <body>
+  <div class="bg-blobs"><div class="blob"></div><div class="blob" style="animation-delay:-10s; right:0; background:#4f46e5;"></div></div>
   <div class="app">
     <div class="header">
-      <div style="font-weight:700; font-size:19px; letter-spacing:-0.5px;">Айя</div>
-      <button id="reset" style="background:none; border:none; color:rgba(255,255,255,0.3); font-size:12px;">Очистить</button>
+      <div style="font-weight:700; font-size:20px;">Айя</div>
+      <button onclick="localStorage.clear(); location.reload();" style="background:none; border:none; color:rgba(255,255,255,0.3);">Очистить</button>
     </div>
     <div class="chat" id="box"></div>
     <div class="input-area">
       <div class="input-row">
-        <input type="text" id="ui" placeholder="Напиши Айе..." autocomplete="off">
-        <button id="btn" class="send-btn">↑</button>
+        <input type="text" id="ui" placeholder="Напиши Айе..." onkeypress="if(event.key==='Enter')send()">
+        <button id="btn" class="btn" onclick="send()">↑</button>
       </div>
     </div>
   </div>
-
   <script>
     const box = document.getElementById('box');
     const ui = document.getElementById('ui');
-    const btn = document.getElementById('btn');
-    const reset = document.getElementById('reset');
-    
-    let h = JSON.parse(localStorage.getItem('aia_v3') || '[]');
-
-    function add(role, txt) {
-      const div = document.createElement('div');
-      div.className = `msg ${role==='user'?'user':'aia'}`;
-      div.textContent = txt;
-      box.appendChild(div);
-      box.scrollTop = box.scrollHeight;
+    let h = JSON.parse(localStorage.getItem('aia_v4') || '[]');
+    function add(r, t) {
+      const d = document.createElement('div'); d.className = `msg ${r==='user'?'user':'aia'}`;
+      d.textContent = t; box.appendChild(d); box.scrollTop = box.scrollHeight;
     }
-
-    // Рендерим историю при загрузке
-    if (h.length === 0) {
-      add('aia', 'Я здесь, Олег. О чем поболтаем?');
-    } else {
-      h.forEach(m => add(m.role, m.content));
-    }
-
+    h.forEach(m => add(m.role, m.content));
+    if(!h.length) add('aia', 'Я здесь, Олег.');
     async function send() {
-      const v = ui.value.trim();
-      if (!v || btn.disabled) return;
-
-      ui.value = '';
-      btn.disabled = true;
-      
-      add('user', v);
-      h.push({role: 'user', content: v});
-
-      try {
-        const res = await fetch('/api/chat', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({messages: h.slice(-12)})
-        });
-        
-        const d = await res.json();
-        
-        if (d.reply) {
-          add('aia', d.reply);
-          h.push({role: 'assistant', content: d.reply});
-          localStorage.setItem('aia_v3', JSON.stringify(h));
-        } else {
-          add('aia', 'Что-то пошло не так...');
-        }
-      } catch(e) {
-        add('aia', 'Связь прервалась...');
-      } finally {
-        btn.disabled = false;
-        ui.focus();
-      }
+      const v = ui.value.trim(); if(!v) return;
+      ui.value = ''; add('user', v); h.push({role:'user', content:v});
+      const res = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({messages:h.slice(-10)}) });
+      const d = await res.json();
+      if(d.reply) { add('aia', d.reply); h.push({role:'assistant', content:d.reply}); localStorage.setItem('aia_v4', JSON.stringify(h)); }
     }
-
-    // Слушатели событий
-    btn.onclick = send;
-    ui.onkeypress = (e) => { if(e.key === 'Enter') send(); };
-    reset.onclick = () => {
-      if(confirm('Начать сначала?')) {
-        localStorage.removeItem('aia_v3');
-        location.reload();
-      }
-    };
   </script>
 </body>
 </html>
