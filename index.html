@@ -83,22 +83,33 @@
       z-index: 0;
     }
 
-    /* ═══ Header — прозрачное стекло с закруглением ═══ */
+    /* ═══ Header — выпуклое стекло снизу ═══ */
     .header {
       position: absolute;
-      top: 8px; left: 8px; right: 8px;
+      top: 0; left: 0; right: 0;
       z-index: 10;
-      padding: env(safe-area-inset-top) 20px 15px;
+      padding: env(safe-area-inset-top) 20px 18px;
       height: var(--header-h);
       display: flex; justify-content: space-between; align-items: center;
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(12px) saturate(180%) brightness(1.2);
-      -webkit-backdrop-filter: blur(12px) saturate(180%) brightness(1.2);
-      border-radius: 20px;
-      border: 0.5px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.01);
+      backdrop-filter: blur(8px) saturate(180%) brightness(1.25);
+      -webkit-backdrop-filter: blur(8px) saturate(180%) brightness(1.25);
+      border-bottom: none;
+      border-radius: 0 0 28px 28px;
       box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        0 10px 40px rgba(0, 0, 0, 0.5),
+        0 2px 8px rgba(0, 0, 0, 0.3),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+    /* Тонкая светлая обводка по нижней дуге */
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 10px; right: 10px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 30%, rgba(255,255,255,0.12) 70%, transparent);
+      border-radius: 0 0 28px 28px;
     }
     .status-group { display: flex; flex-direction: column; }
     .name { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
@@ -110,7 +121,7 @@
       top: 0; left: 0; right: 0; bottom: 0;
       z-index: 1;
       overflow-y: auto;
-      padding: calc(var(--header-h) + 25px) 20px calc(var(--input-h) + 25px) 20px;
+      padding: calc(var(--header-h) + 20px) 20px calc(var(--input-h) + 20px) 20px;
       display: flex; flex-direction: column; gap: 18px;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
@@ -130,10 +141,10 @@
 
     .user {
       align-self: flex-end;
-      background: rgba(139, 92, 246, 0.15);
-      backdrop-filter: blur(12px) saturate(180%) brightness(1.1);
-      -webkit-backdrop-filter: blur(12px) saturate(180%) brightness(1.1);
-      border: 0.5px solid rgba(168, 85, 247, 0.25);
+      background: rgba(139, 92, 246, 0.12);
+      backdrop-filter: blur(8px) saturate(180%) brightness(1.15);
+      -webkit-backdrop-filter: blur(8px) saturate(180%) brightness(1.15);
+      border: 0.5px solid rgba(168, 85, 247, 0.2);
       border-bottom-right-radius: 6px;
       color: white;
       box-shadow: 
@@ -143,35 +154,45 @@
 
     .aia {
       align-self: flex-start;
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(12px) saturate(180%) brightness(1.1);
-      -webkit-backdrop-filter: blur(12px) saturate(180%) brightness(1.1);
-      border: 0.5px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(8px) saturate(180%) brightness(1.15);
+      -webkit-backdrop-filter: blur(8px) saturate(180%) brightness(1.15);
+      border: 0.5px solid rgba(255, 255, 255, 0.1);
       border-bottom-left-radius: 6px;
       box-shadow: 
         0 8px 32px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
 
-    /* ═══ Input Area — прозрачное стекло с закруглением ═══ */
+    /* ═══ Input Area — выпуклое стекло сверху ═══ */
     .input-area {
       position: absolute;
-      bottom: 8px; left: 8px; right: 8px;
+      bottom: 0; left: 0; right: 0;
       z-index: 10;
-      padding: 15px 15px calc(15px + env(safe-area-inset-bottom));
+      padding: 18px 15px calc(15px + env(safe-area-inset-bottom));
       height: var(--input-h);
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(12px) saturate(180%) brightness(1.2);
-      -webkit-backdrop-filter: blur(12px) saturate(180%) brightness(1.2);
-      border-radius: 20px;
-      border: 0.5px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.01);
+      backdrop-filter: blur(8px) saturate(180%) brightness(1.25);
+      -webkit-backdrop-filter: blur(8px) saturate(180%) brightness(1.25);
+      border-top: none;
+      border-radius: 28px 28px 0 0;
       box-shadow: 
-        0 -8px 32px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        0 -10px 40px rgba(0, 0, 0, 0.5),
+        0 -2px 8px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+    }
+    /* Тонкая светлая обводка по верхней дуге */
+    .input-area::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 10px; right: 10px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 30%, rgba(255,255,255,0.12) 70%, transparent);
     }
     .input-row {
       display: flex; gap: 10px;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.06);
       padding: 9px 9px 9px 18px; border-radius: 26px;
       border: 0.5px solid rgba(255, 255, 255, 0.1);
     }
