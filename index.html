@@ -278,26 +278,7 @@
       localStorage.removeItem('aia_v2');
       location.reload();
     }
-    // Этот скрипт имитирует ввод сообщения и нажатие кнопки за тебя
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        // 1. Находим поле ввода (обычно это <input> или <textarea>)
-        const inputField = document.querySelector('input') || document.querySelector('textarea');
-        // 2. Находим кнопку отправки
-        const sendButton = document.querySelector('button');
 
-        if (inputField && sendButton) {
-            // Записываем "секретную" команду для Айи
-            inputField.value = "Олег зашел. Поприветствуй его ярко и начни разговор сама.";
-            
-            // Имитируем нажатие кнопки
-            sendButton.click();
-            
-            // Очищаем поле (опционально, зависит от того, как работает твой скрипт)
-            inputField.value = "";
-        }
-    }, 2000); // Подождем 2 секунды после загрузки
-});
   </script>
 </body>
 </html>
