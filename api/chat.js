@@ -43,8 +43,8 @@ module.exports = async (req, res) => {
       },
       body: JSON.stringify({
         // СЕКРЕТНОЕ ОРУЖИЕ: Если базовая Llama 3.1 все еще тупит, поменяй строку ниже на:
-        // model: 'mistralai/mistral-7b-instruct:free', 'meta-llama/llama-3.1-8b-instruct',
-        model: 'nousresearch/hermes-3-llama-3.1-8b',
+        // model: 'mistralai/mistral-7b-instruct:free', 'nousresearch/hermes-3-llama-3.1-8b',
+        model: 'meta-llama/llama-3.1-8b-instruct',
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages
