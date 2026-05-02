@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
         'X-Title': 'AIA'
       },
       body: JSON.stringify({
-        model: 'qwen/qwen-2-72b-instruct:free',
+        model: 'huggingfaceh4/zephyr-7b-beta:free',
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages
