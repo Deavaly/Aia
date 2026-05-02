@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
         'X-Title': 'AIA'
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.1-405b-instruct:free',
+        model: 'microsoft/phi-3-medium-128k-instruct:free',
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages
