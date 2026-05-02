@@ -42,16 +42,14 @@ module.exports = async (req, res) => {
         'X-Title': 'AIA'
       },
       body: JSON.stringify({
-        // СЕКРЕТНОЕ ОРУЖИЕ: Если базовая Llama 3.1 все еще тупит, поменяй строку ниже на:
-        // model: 'meta-llama/llama-3.1-8b-instruct',
-        model: 'mistralai/mistral-7b-instruct:free',
+        model: 'meta-llama/llama-3.1-8b-instruct',
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages
         ],
-        temperature: 0.85, // Подняли с 0.6 до 0.85, чтобы убрать шаблонность бота
+        temperature: 0.3, // Подняли с 0.6 до 0.85, чтобы убрать шаблонность бота
         top_p: 0.9,       // Добавлено для естественности речи
-        frequency_penalty: 0.3 // Заставит её использовать более разнообразные слова, уберет зацикленность
+        frequency_penalty: 0.8 // Заставит её использовать более разнообразные слова, уберет зацикленность
       })
     });
 
