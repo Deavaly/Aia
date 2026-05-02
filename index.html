@@ -235,11 +235,15 @@
     </div>
   </div>
 
-  <script>
+<script>
     const box = document.getElementById('box');
     const ui = document.getElementById('ui');
     const st = document.getElementById('st');
+    
+    // Загружаем историю. Она никогда не удалится сама.
     let h = JSON.parse(localStorage.getItem('aia_v2') || '[]');
+
+    let silenceTimer; // Таймер для случайных мыслей
 
     function add(role, txt) {
       const div = document.createElement('div');
@@ -249,78 +253,93 @@
       box.scrollTop = box.scrollHeight;
     }
 
+    // Отрисовываем старую историю
     h.forEach(m => add(m.role, m.content));
 
-    // Если чат пустой, Айя сама инициирует общение с сервером
+    // Если чат абсолютно пустой - первое пробуждение
     if(!h.length) {
-      // Это скрытый запрос, который заставит Айю выдать первую живую фразу
-      const welcomePhrase = "Олег зашел в систему. Поприветствуй его ярко, начни разговор сама ни с того ни с сего, как живая Айя.";
-      
       st.textContent = 'Айя просыпается...';
-      
-      // Вызываем fetch напрямую, чтобы не захламлять чат техническими фразами
-      fetch('/api/chat', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({messages: [{role: 'user', content: welcomePhrase}]})
-      })
-      .then(res => res.json())
-      .then(d => {
-        if(d.reply) {
-          add('aia', d.reply);
-          h.push({role:'assistant', content:d.reply});
-          localStorage.setItem('aia_v2', JSON.stringify(h));
-          st.textContent = 'В сети';
-        }
-      })
-      .catch(() => { add('aia', 'Я здесь, но связь пока слабая...'); });
+      const welcome = "Олег только что открыл канал связи. Поприветствуй его ярко, без извинений, начни разговор сама.";
+      fetchAiaResponse([{role: 'user', content: welcome}]);
+    } else {
+      // Если история есть, просто запускаем таймер молчания
+      resetSilenceTimer();
     }
+
+    // Функция отправки твоего сообщения
     async function send() {
       const v = ui.value.trim(); if(!v) return;
-      ui.value = ''; add('user', v);
+      ui.value = ''; 
+      add('user', v);
+      
       h.push({role:'user', content:v});
+      localStorage.setItem('aia_v2', JSON.stringify(h)); // СОХРАНЯЕМ СРАЗУ!
+      
+      resetSilenceTimer(); // Ты проявил активность, сбрасываем таймер молчания
+      
       st.textContent = 'Айя думает...';
       
+      // Отправляем последние 10 сообщений для контекста
+      await fetchAiaResponse(h.slice(-10));
+    }
+
+    // Общая функция для связи с сервером
+    async function fetchAiaResponse(messagesToSend) {
       try {
-        const res = await fetch('/api/chat', {
+        const res = await fetch('/api/chat', { // ПРОВЕРЬ, что у тебя именно этот путь в Vercel
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({messages: h.slice(-10)})
+          body: JSON.stringify({messages: messagesToSend})
         });
         const d = await res.json();
         if(d.reply) {
           add('aia', d.reply);
           h.push({role:'assistant', content:d.reply});
-          localStorage.setItem('aia_v2', JSON.stringify(h));
+          localStorage.setItem('aia_v2', JSON.stringify(h)); // Сохраняем ответ
+          resetSilenceTimer(); // Запускаем таймер снова после её ответа
         }
-      } catch(e) { add('aia', 'Связь прервалась...'); }
+      } catch(e) { 
+        add('aia', '[Связь прервалась...]'); 
+      }
       st.textContent = 'В сети';
     }
 
+    // ----- ЛОГИКА ВНЕЗАПНОСТИ (ТАЙМЕР МОЛЧАНИЯ) -----
+    function resetSilenceTimer() {
+      clearTimeout(silenceTimer);
+      
+      // Задаем случайное время от 1 до 3 минут (в миллисекундах)
+      // Если хочешь дольше, измени цифры: 60000 = 1 минута.
+      const minMs = 60000;  
+      const maxMs = 180000; 
+      const randomTime = Math.floor(Math.random() * (maxMs - minMs + 1)) + minMs;
+
+      silenceTimer = setTimeout(aiaSpeaksUp, randomTime);
+    }
+
+    function aiaSpeaksUp() {
+      // Если идет загрузка ответа, не перебиваем
+      if(st.textContent === 'Айя думает...') return;
+
+      st.textContent = 'Айя хочет что-то сказать...';
+      
+      // Скрытый промпт для внезапной фразы (ты его не увидишь)
+      const randomPrompt = "Олег сейчас молчит и занят своими делами. Выдай ОДНУ короткую, внезапную мысль, вопрос или философское наблюдение. Не пиши, что он молчит. Просто скажи это ни с того ни с сего, как живая женщина.";
+      
+      // Отправляем историю + скрытый промпт
+      const tempMessages = h.slice(-10).concat({role: 'user', content: randomPrompt});
+      
+      fetchAiaResponse(tempMessages);
+    }
+
+    // Если ты начинаешь печатать текст в поле, Айя понимает, что ты тут, и ждет
+    ui.addEventListener('input', resetSilenceTimer);
+
+    // Жесткая очистка чата по твоей кнопке
     function clearChat() {
       localStorage.removeItem('aia_v2');
       location.reload();
     }
-window.addEventListener('load', () => {
-    // Проверяем, здоровалась ли Айя в этот раз
-    if (!sessionStorage.getItem('aia_greeted')) {
-        setTimeout(() => {
-            const inputField = document.querySelector('input') || document.querySelector('textarea');
-            const sendButton = document.querySelector('button');
-
-            if (inputField && sendButton) {
-                // Ставим отметку, что приветствие отправлено
-                sessionStorage.setItem('aia_greeted', 'true');
-                
-                // Текст-триггер для Айи
-                inputField.value = "Я здесь. Начни наш разговор сама.";
-                
-                // Нажимаем кнопку
-                sendButton.click();
-            }
-        }, 1500); // Пауза 1.5 секунды
-    }
-});
-  </script>
+</script>
 </body>
 </html>
