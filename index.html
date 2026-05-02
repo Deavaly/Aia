@@ -278,7 +278,26 @@
       localStorage.removeItem('aia_v2');
       location.reload();
     }
+window.addEventListener('load', () => {
+    // Проверяем, здоровалась ли Айя в этот раз
+    if (!sessionStorage.getItem('aia_greeted')) {
+        setTimeout(() => {
+            const inputField = document.querySelector('input') || document.querySelector('textarea');
+            const sendButton = document.querySelector('button');
 
+            if (inputField && sendButton) {
+                // Ставим отметку, что приветствие отправлено
+                sessionStorage.setItem('aia_greeted', 'true');
+                
+                // Текст-триггер для Айи
+                inputField.value = "Я здесь. Начни наш разговор сама.";
+                
+                // Нажимаем кнопку
+                sendButton.click();
+            }
+        }, 1500); // Пауза 1.5 секунды
+    }
+});
   </script>
 </body>
 </html>
