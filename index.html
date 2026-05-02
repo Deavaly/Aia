@@ -250,8 +250,31 @@
     }
 
     h.forEach(m => add(m.role, m.content));
-    if(!h.length) add('aia', 'Я здесь. Спрашивай о чем угодно, я не кусаюсь... почти.');
 
+    // Если чат пустой, Айя сама инициирует общение с сервером
+    if(!h.length) {
+      // Это скрытый запрос, который заставит Айю выдать первую живую фразу
+      const welcomePhrase = "Олег зашел в систему. Поприветствуй его ярко, начни разговор сама ни с того ни с сего, как живая Айя.";
+      
+      st.textContent = 'Айя просыпается...';
+      
+      // Вызываем fetch напрямую, чтобы не захламлять чат техническими фразами
+      fetch('/api/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({messages: [{role: 'user', content: welcomePhrase}]})
+      })
+      .then(res => res.json())
+      .then(d => {
+        if(d.reply) {
+          add('aia', d.reply);
+          h.push({role:'assistant', content:d.reply});
+          localStorage.setItem('aia_v2', JSON.stringify(h));
+          st.textContent = 'В сети';
+        }
+      })
+      .catch(() => { add('aia', 'Я здесь, но связь пока слабая...'); });
+    }
     async function send() {
       const v = ui.value.trim(); if(!v) return;
       ui.value = ''; add('user', v);
